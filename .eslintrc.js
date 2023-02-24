@@ -3,11 +3,14 @@ module.exports = {
   parserOptions: {
     project: 'tsconfig.json',
     sourceType: 'module',
+    ecmaVersion: 2018
   },
   plugins: ['@typescript-eslint/eslint-plugin'],
   extends: [
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended'
   ],
   root: true,
   env: {
@@ -25,6 +28,14 @@ module.exports = {
       {
         'endOfLine': 'auto',
       }
-    ]
+    ],
   },
+  "overrides": [
+    {
+      "files": ["**/*.spec.ts"],
+      "rules": {
+        "semi": ["error", "always"]
+      }
+    }
+  ]
 };
