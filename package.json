@@ -36,17 +36,13 @@
     "rxjs": "^7.2.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.21.0",
-    "@babel/core": "^7.21.0",
-    "@babel/node": "^7.20.7",
-    "@babel/plugin-transform-runtime": "^7.21.0",
-    "@babel/preset-env": "^7.20.2",
     "@nestjs/cli": "^8.0.0",
     "@nestjs/schematics": "^8.0.0",
     "@nestjs/testing": "^8.0.0",
     "@types/express": "^4.17.13",
     "@types/jest": "27.4.1",
     "@types/node": "^16.0.0",
+    "@types/request": "^2.48.8",
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
@@ -72,13 +68,17 @@
     "rootDir": "./test",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
-      "^.+\\.tsx?$": "babel-jest"
+      "^.+\\.(t|j)s$": "ts-jest"
     },
     "collectCoverageFrom": [
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "./test/coverage",
     "preset": "ts-jest",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/$1",
+      "^axios$": "<rootDir>/Mocks/axios.ts"
+    }
   }
 }

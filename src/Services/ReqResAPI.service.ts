@@ -2,22 +2,22 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import axios from 'axios';
 import { ReqResAPIDTO } from '../Dtos/ReqResAPI.dto';
 import { ReqResAPIInterface } from '../Interfaces/ReqResAPI.interface';
-import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { RabbitMQService } from './RabbitMQ.service';
-import * as request from 'request';
+import request from 'request';
 import * as path from 'path';
 import * as fs from 'fs';
+import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
 export class ReqResAPIService {
   constructor(
     @InjectModel('reqResAPIModel')
-    private readonly reqResAPIModel: Model<ReqResAPIInterface>,
+    public reqResAPIModel: Model<ReqResAPIInterface>,
     private readonly rabbitMQService: RabbitMQService,
   ) {}
 
-  async deleteUserIdAvatar(id: number): Promise<any> {
+  async deleteUserIdAvatar(id: number): Promise<string> {
     const userFound = await this.reqResAPIModel.findOne({ id });
 
     if (!userFound) {
@@ -33,7 +33,7 @@ export class ReqResAPIService {
 
     console.log(mensage);
 
-    return { message: mensage };
+    return mensage;
   }
 
   async deleteAvatar(id: number): Promise<void> {
@@ -57,10 +57,18 @@ export class ReqResAPIService {
   }
 
   async getUserId(id: number): Promise<ReqResAPIDTO> {
-    const resUser = await axios.get(`https://reqres.in/api/users/${id}`);
-    const userId = resUser.data;
+    try {
+      const resUser = await axios.get(`https://reqres.in/api/users/${id}`);
+      const userId = resUser.data;
 
-    return userId;
+      if (!userId || !userId.data || !userId.data.id) {
+        throw new NotFoundException('User not found');
+      }
+
+      return userId;
+    } catch (error) {
+      throw new NotFoundException('User not found');
+    }
   }
 
   async getUsers(): Promise<ReqResAPIDTO[]> {

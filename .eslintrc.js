@@ -30,12 +30,4 @@ module.exports = {
       }
     ],
   },
-  "overrides": [
-    {
-      "files": ["**/*.spec.ts"],
-      "rules": {
-        "semi": ["error", "always"]
-      }
-    }
-  ]
 };
