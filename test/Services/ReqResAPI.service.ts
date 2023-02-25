@@ -1,72 +1,33 @@
-import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { Model } from 'mongoose';
-import { ReqResAPIDTO } from '../../src/Dtos/ReqResAPI.dto';
-import { ReqResAPIInterface } from '../../src/Interfaces/ReqResAPI.interface';
-import { RabbitMQService } from '../../src/Services/RabbitMQ.service';
+import { HttpModule } from '@nestjs/common';
 import { ReqResAPIService } from '../../src/Services/ReqResAPI.service';
+import path from 'path';
+import * as fs from 'fs';
 
 describe('ReqResAPIService', () => {
   let service: ReqResAPIService;
-  let model: Model<ReqResAPIInterface>;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  let rabbitMQService: RabbitMQService;
 
   beforeEach(async () => {
-    const moduleRef: TestingModule = await Test.createTestingModule({
-      providers: [
-        ReqResAPIService,
-        {
-          provide: 'reqResAPIModel',
-          useValue: {
-            findOne: jest.fn(),
-            deleteOne: jest.fn(),
-          },
-        },
-        {
-          provide: RabbitMQService,
-          useValue: {
-            sendMessageToQueue: jest.fn(),
-          },
-        },
-      ],
+    const module: TestingModule = await Test.createTestingModule({
+      imports: [HttpModule],
+      providers: [ReqResAPIService],
     }).compile();
 
-    service = moduleRef.get<ReqResAPIService>(ReqResAPIService);
-    model = moduleRef.get<Model<ReqResAPIInterface>>('reqResAPIModel');
-    rabbitMQService = moduleRef.get<RabbitMQService>(RabbitMQService);
+    service = module.get<ReqResAPIService>(ReqResAPIService);
   });
 
-  describe('deleteUserIdAvatar', () => {
-    const id = 1;
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
 
-    it('should throw NotFoundException if user is not found', async () => {
-      jest.spyOn(model, 'findOne').mockReturnValueOnce(null);
-
-      await expect(service.deleteUserIdAvatar(id)).rejects.toThrowError(
-        new NotFoundException(`User with id ${id} not found`),
-      );
-    });
-
-    it('should delete user and avatar if user is found', async () => {
-      const user: ReqResAPIDTO = {
-        id,
-        email: 'test@test.com',
-        first_name: 'John',
-        last_name: 'Doe',
-        avatar: 'avatar',
-      };
-      jest.spyOn(model, 'findOne').mockReturnValueOnce(user as any);
-      jest.spyOn(service, 'deleteAvatar').mockReturnValueOnce(undefined);
-
-      const result = await service.deleteUserIdAvatar(id);
-
-      expect(result).toEqual({
-        message: `User with id ${id} deleted successfully`,
-      });
-      expect(model.findOne).toHaveBeenCalledWith({ id });
-      expect(model.deleteOne).toHaveBeenCalledWith({ id });
-      expect(service.deleteAvatar).toHaveBeenCalledWith(id);
+  describe('downloadAvatar', () => {
+    it('should download and save the avatar image', async () => {
+      const avatarPath = 'https://reqres.in/img/faces/7-image.jpg';
+      await service.downloadAvatar(avatarPath);
+      const fileName = path.basename(avatarPath);
+      const dirPath = path.resolve(__dirname, '../../src/Assets/AvatarImg');
+      const filePath = `${dirPath}/${fileName}`;
+      expect(fs.existsSync(filePath)).toBeTruthy();
     });
   });
 });
