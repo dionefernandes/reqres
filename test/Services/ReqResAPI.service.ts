@@ -4,6 +4,7 @@ import { ReqResAPIService } from '../../src/Services/ReqResAPI.service';
 import { RabbitMQService } from '../../src/Services/RabbitMQ.service';
 import axios from 'axios';
 import { listUsersMock } from '../../test/Mocks/APIService';
+import { NotFoundException } from '@nestjs/common';
 
 jest.mock('axios');
 jest.mock('request', () => {
@@ -81,9 +82,11 @@ describe('getUserIdAvatar', () => {
 
     jest.spyOn(axios, 'get').mockResolvedValueOnce(listUsersMock());
     jest.spyOn(axios, 'get').mockResolvedValueOnce({ data: 'any-data' });
-
-    console.log(await reqResAPIServiceMock.getUserIdAvatar(id), '-----------');
-    console.log({ id, userFound });
+    jest
+      .spyOn(reqResAPIServiceMock, 'getUserIdAvatar')
+      .mockRejectedValueOnce(
+        new NotFoundException(`User with id ${id} not found`),
+      );
 
     expect(await reqResAPIServiceMock.getUserIdAvatar(id)).toEqual({
       id,

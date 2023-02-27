@@ -14,6 +14,6 @@ import { RabbitMQModule } from '../Modules/RabbitMQ.module';
   ],
   controllers: [ReqResAPIController],
   providers: [ReqResAPIService],
-  exports: [ReqResAPIService],
+  exports: [ReqResAPIService, RabbitMQModule],
 })
 export class ReqResAPIModule {}
