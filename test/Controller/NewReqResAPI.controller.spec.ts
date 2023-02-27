@@ -3,7 +3,6 @@ import { ReqResAPIController } from '../../src/Controllers/ReqResAPI.controller'
 import { ReqResAPIService } from '../../src/Services/ReqResAPI.service';
 import * as mockService from '../../test/Mocks/APIService';
 import request from 'supertest';
-import { ReqResAPIDTO } from 'src/Dtos/ReqResAPI.dto';
 
 describe('ReqResAPIController', () => {
   let controllerReqResAPI: ReqResAPIController;
@@ -21,14 +20,14 @@ describe('ReqResAPIController', () => {
       return Promise.resolve(singleUserMock);
     },
 
-    // getUserIdAvatar: (id: number) => {
-    //   const singleUserMock = mockService.singleUserMock;
-    //   return Promise.resolve(singleUserMock);
-    // },
+    getUserIdAvatar: (id: number) => {
+      const singleUserMock = mockService.singleUserMock;
+      return Promise.resolve(singleUserMock);
+    },
 
-    // deleteUserIdAvatar: (id: number) => {
-    //   return Promise.resolve(`User with id ${id} deleted successfully`);
-    // },
+    deleteUserIdAvatar: (id: number) => {
+      return Promise.resolve(`User with id ${id} deleted successfully`);
+    },
   };
 
   beforeEach(async () => {
@@ -75,7 +74,37 @@ describe('ReqResAPIController', () => {
       const response = await request(app.getHttpServer())
         .get(`/api/users/${id}`)
         .expect(200);
-      //expect(response.body).toEqual(mockService.listUsersDTOMock);
+      expect(response.body).toEqual(mockService.listUsersDTOMock);
+    });
+  });
+
+  describe('getUserIdAvatar', () => {
+    it('should return the user with the given id', async () => {
+      const id = 1;
+
+      jest
+        .spyOn(serviceReqResAPI, 'getUserIdAvatar')
+        .mockResolvedValue(mockService.listUsersDTOMock);
+
+      const response = await request(app.getHttpServer())
+        .get(`/api/users/${id}/avatar`)
+        .expect(200);
+      expect(response.body).toEqual(mockService.listUsersDTOMock);
+    });
+  });
+
+  describe('deleteUserIdAvatar', () => {
+    it('should delete a user by id', async () => {
+      const id = 1;
+      const message = `User with id ${id} deleted successfully`;
+
+      jest
+        .spyOn(serviceReqResAPI, 'deleteUserIdAvatar')
+        .mockResolvedValue(message);
+
+      const response = await request(app.getHttpServer())
+        .get(`/api/users/${id}/avatar`)
+        .expect(200);
       expect(response.body).toEqual(mockService.listUsersDTOMock);
     });
   });

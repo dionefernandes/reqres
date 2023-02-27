@@ -78,9 +78,7 @@
     "testEnvironment": "node",
     "moduleNameMapper": {
       "^src/(.*)$": "<rootDir>/$1",
-      "^axios$": "<rootDir>/Mocks/axios.ts",
-      "^Controller/(.*)$": "<rootDir>/Controller/",
-      "^Services/(.*)$": "<rootDir>/Services/"
+      "^axios$": "<rootDir>/Mocks/axios.ts"
     }
   }
 }

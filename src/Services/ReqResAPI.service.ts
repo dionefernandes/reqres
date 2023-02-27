@@ -36,13 +36,18 @@ export class ReqResAPIService {
     return mensage;
   }
 
-  async deleteAvatar(id: number): Promise<void> {
+  async deleteAvatar(id: number): Promise<string> {
     const fileName = `${id}-image.jpg`;
     const dirPath = path.resolve(__dirname, '../../src/Assets/AvatarImg');
 
     fs.unlink(`${dirPath}/${fileName}`, (err) => {
       if (err) throw err;
     });
+
+    const message = `Avatar image file with id ${id} deleted successfully`;
+
+    console.log(message);
+    return message;
   }
 
   async getUserIdAvatar(id: number): Promise<ReqResAPIDTO> {
