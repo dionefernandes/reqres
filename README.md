@@ -1,73 +1,52 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+# Aplicação que faz requisições para API em [REQRES](https://reqres.in)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A aplicação faz requisições HTTP para API [REQRES](https://reqres.in), que é uma API pública de testes para desenvolvedores.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
 ## Installation
 
-```bash
-$ npm install
-```
+1. Certifique-se de ter o Node.js instalado na sua máquina.
+2. Faça o download da aplicação e abra em um editor de códigos como o Visual Studio Code
+3. Acesse o console do editor e acesse o diretório raiz do projeto
+4. Execute o comando: npm install
+5. Na pasta raiz do projeto existe um arquivo chamado 'API.postman_collection.json'. Import este arquivo para seu Postman para poder executar as requisições HTTP.
+6. Após finalizar a instalação da pasta 'node_modules', no console do editor de códigos inicie a aplicação executando o comando: npm run start
+7. Caso pretenda adicionar breakpoints na aplicação, inicie a mesma com: npm run start:dev
 
-## Running the app
+### Obs
 
-```bash
-# development
-$ npm run start
+1. A aplicação será executada na porta 3000 (http://localhost:3000). Caso deseje, você pode definir uma nova porta em 'src/main.ts', na raiz do projeto.
+2. Utilize o MongoDB Compass para visualizar o banco de dados. O caminho para o banco de dados pode ser alterdo no arquivo 'app.module.ts' em 'src/app.module.ts', na raiz do projeto.
 
-# watch mode
-$ npm run start:dev
 
-# production mode
-$ npm run start:prod
-```
+## Uso da aplicação
+
+Uma vez iniciada a aplicação, podemos utilizar o Postman para executar as requisições. O projeto possui 4 endpoints com as seguintes funcionalidades:
+
+### @Post('/users')
+
+Essa requisição faz uma chamada a API [REQRES](https://reqres.in) utilizando a biblioteca Axios. A API por sua vez retorna uma lista de usuários com seus respectivos dados. Os dados do usuário são guardados em um banco de dados não relacional, que é o MongoDB. O avatar do usuário também é guardado em base 64 no banco de dados e um arquivo com o avatar do usuário é criado no diretório 'Assets/AvatarImg', na raiz do projeto.
+
+### @Get('/users/:id')
+
+Neste caso é feita uma requisição a API [REQRES](https://reqres.in) informando o id de um usuário. A API em resposta retorna os dados do usuário requisitado. Os dados restornados podem ser visualizados no Postman
+
+### @Get('/users/:id/avatar')
+
+Esta requisição faz uma consulta ao banco de dados passando um id de usuário. Os dados do usuário são retornados, incluindo o avatar em base 64. Os dados podem ser visualizados no Postman
+
+### @Delete('/users/:id/avatar')
+
+Esta requisição apaga um usuário do banco de dados usando como critério o id informado. O arquivo com o avatar do usuário que havia sido criado no diretório em 'Assets/AvatarImg', na raiz do projeto, também é apagado.
+
 
 ## Test
 
-```bash
-# unit tests
-$ npm run test
+Os testes unitários da aplicação foram alocados no diretório 'test', na raiz do projeto. O comando para executar os testes unitários é: npm run test
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
+Também é possível criar um arquivo 'coverage' para visualizar a cobertura de testes utilizando o comando 'npm run test:cov' no console do editor de códigos.
 
 ## Support
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+E-mail: dionefernandes@gmail.com
+Telegram: @dioneRfernandes
