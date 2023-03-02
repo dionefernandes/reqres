@@ -168,6 +168,8 @@ describe('deleteAvatar', () => {
     const dirPath = path.resolve(__dirname, '../../src/Assets/AvatarImg');
     const message = `Avatar image file with id ${id} deleted successfully`;
 
+    console.log(dirPath, ' + ', fileName);
+
     fs.writeFileSync(`${dirPath}/${fileName}`, 'Test file content');
 
     const result = await reqResAPIServiceMock.deleteAvatar(id);
